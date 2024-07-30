@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/abdellahomari87/edureka-project2.git'
+                git branch: 'master', url: 'https://github.com/abdellahomari87/edureka-project2.git'
             }
         }
 
