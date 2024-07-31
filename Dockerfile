@@ -15,7 +15,7 @@ COPY src ./src
 RUN mvn package
 
 # Utilisez l'image de base officielle OpenJDK pour exécuter l'application
-FROM openjdk:17-jre-slim
+FROM openjdk:17-slim
 
 # Définissez le répertoire de travail dans le conteneur
 WORKDIR /app
