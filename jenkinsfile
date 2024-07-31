@@ -1,35 +1,19 @@
 pipeline {
-    agent any
-
+    agent none
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'master', url: 'https://github.com/abdellahomari87/edureka-project2.git'
-            }
-        }
-
-        stage('Compile') {
-            steps {
-                script {
-                    sh 'mvn compile'
-                }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                script {
-                    sh 'mvn test'
-                }
-            }
-        }
-
         stage('Build') {
+            agent { label 'slave' }
             steps {
-                script {
-                    sh 'mvn package'
-                }
+                sh 'echo "Building on slave node"'
+                // Ajoutez vos étapes de build ici
             }
         }
-  } 
+        stage('Test') {
+            agent { label 'slave' }
+            steps {
+                sh 'echo "Testing on slave node"'
+                // Ajoutez vos étapes de test ici
+            }
+        }
+    }
 }
