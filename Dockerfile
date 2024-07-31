@@ -1,4 +1,4 @@
-# Utilisez l'image de base officielle de Maven pour construire l'application
+# Étape 1: Construire l'application avec Maven
 FROM maven:3.8.4-openjdk-17 AS build
 
 # Définissez le répertoire de travail dans le conteneur
@@ -11,17 +11,21 @@ RUN mvn dependency:go-offline
 # Copiez le reste des fichiers du projet
 COPY src ./src
 
-# Compilez l'application
+# Compilez l'application et générez le fichier WAR
 RUN mvn package
 
-# Utilisez l'image de base officielle OpenJDK pour exécuter l'application
-FROM openjdk:17-slim
+# Étape 2: Configurer Tomcat et déployer l'application
+FROM tomcat:10.1.10-jdk17-temurin-jammy
 
-# Définissez le répertoire de travail dans le conteneur
-WORKDIR /app
+# Supprimer l'application par défaut dans Tomcat
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copiez le fichier JAR de l'étape de construction précédente
-COPY --from=build /app/target/*.jar app.jar
+# Copier le fichier WAR généré dans le dossier webapps de Tomcat
+COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/
 
-# Spécifiez la commande pour exécuter l'application
-CMD ["java", "-jar", "app.jar"]
+# Exposer le port par défaut de Tomcat
+EXPOSE 8080
+
+# Démarrer Tomcat
+CMD ["catalina.sh", "run"]
+
