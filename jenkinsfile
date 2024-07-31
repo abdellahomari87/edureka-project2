@@ -1,0 +1,19 @@
+pipeline {
+    agent none
+    stages {
+        stage('Build') {
+            agent { label 'slave' }
+            steps {
+                sh 'echo "Building on slave node"'
+                // Ajoutez vos étapes de build ici
+            }
+        }
+        stage('Test') {
+            agent { label 'slave' }
+            steps {
+                sh 'echo "Testing on slave node"'
+                // Ajoutez vos étapes de test ici
+            }
+        }
+    }
+}
